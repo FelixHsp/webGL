@@ -20,21 +20,26 @@
         const OBJLoader = new THREE.OBJLoader();
         const MTLLoader = new THREE.MTLLoader();
 
-        MTLLoader.load('./obj.mtl', function (materials) {
-            // 返回一个包含材质的对象MaterialCreator
-            // console.log(materials);
-            // obj的模型会和MaterialCreator包含的材质对应起来
-            OBJLoader.setMaterials(materials);
-            OBJLoader.load('./obj.obj', function (obj) {
-                console.log(obj);
-                obj.scale.set(10, 10, 10); //放大obj组对象
-                scene.add(obj);//返回的组对象插入场景中
-            });
+        OBJLoader.load('./chest.obj', function (obj) {
+            // obj.children[0].geometry.attributes.normal.array = obj.children[0].geometry.attributes.normal.array.slice(0, 6000);
+            // obj.children[0].geometry.attributes.position.array = obj.children[0].geometry.attributes.position.array.slice(0, 6000);
+            obj.scale.set(10, 10, 10); //放大obj组对象
+            const newObj = obj.clone();
+            newObj.children = newObj.children.slice(0, 3).concat(newObj.children.slice(11, 14));
+            obj.children = obj.children.slice(3, 11)
+            console.log(newObj.children);
+            scene.add(obj);//返回的组对象插入场景中
+            scene.add(newObj);
+
+            setTimeout(() => {
+                obj.rotation.x -= .8;
+                obj.translateY(15);
+            }, 2000);
         });
         const point = new THREE.PointLight(0xffffff);
         point.position.set(400, 200, 300); //点光源位置
         scene.add(point); //点光源添加到场景中
-        const ambient = new THREE.AmbientLight(0x444444);
+        const ambient = new THREE.AmbientLight(0xff0000);
         scene.add(ambient);
 
         const width = window.innerWidth; //窗口宽度
