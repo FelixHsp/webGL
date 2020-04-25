@@ -5,6 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+        }
+    </style>
 </head>
 
 <body>
@@ -19,27 +24,21 @@
         const scene = new THREE.Scene();
         const OBJLoader = new THREE.OBJLoader();
         const MTLLoader = new THREE.MTLLoader();
+        let obj = new Object();
 
-        OBJLoader.load('./chest.obj', function (obj) {
-            // obj.children[0].geometry.attributes.normal.array = obj.children[0].geometry.attributes.normal.array.slice(0, 6000);
-            // obj.children[0].geometry.attributes.position.array = obj.children[0].geometry.attributes.position.array.slice(0, 6000);
+        OBJLoader.load('./chest.obj', res => {
+            obj = res;
             obj.scale.set(10, 10, 10); //放大obj组对象
             const newObj = obj.clone();
             newObj.children = newObj.children.slice(0, 3).concat(newObj.children.slice(11, 14));
             obj.children = obj.children.slice(3, 11)
-            console.log(newObj.children);
             scene.add(obj);//返回的组对象插入场景中
             scene.add(newObj);
-
-            setTimeout(() => {
-                obj.rotation.x -= .8;
-                obj.translateY(15);
-            }, 2000);
         });
-        const point = new THREE.PointLight(0xffffff);
+        const point = new THREE.PointLight(0x666666);
         point.position.set(400, 200, 300); //点光源位置
         scene.add(point); //点光源添加到场景中
-        const ambient = new THREE.AmbientLight(0xff0000);
+        const ambient = new THREE.AmbientLight(0xff461f);
         scene.add(ambient);
 
         const width = window.innerWidth; //窗口宽度
@@ -53,7 +52,7 @@
 
         const renderer = new THREE.WebGLRenderer();
         renderer.setSize(width, height); //设置渲染区域尺寸
-        renderer.setClearColor(0xb9d3ff, 1); //设置背景颜色
+        renderer.setClearColor(0xeeeeee, 1); //设置背景颜色
         document.body.appendChild(renderer.domElement); //body元素中插入canvas对象
 
         // 渲染函数
@@ -63,6 +62,10 @@
             requestAnimationFrame(render); //请求再次执行渲染函数render，渲染下一帧
         }
         render();
+        setTimeout(() => {
+            obj.rotation.x -= .8;
+            obj.translateY(15);
+        }, 2000);
         //创建控件对象  相机对象camera作为参数   控件可以监听鼠标的变化，改变相机对象的属性
         const controls = new THREE.OrbitControls(camera, renderer.domElement);
     </script>
