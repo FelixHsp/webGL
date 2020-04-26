@@ -24,21 +24,61 @@
         const scene = new THREE.Scene();
         const OBJLoader = new THREE.OBJLoader();
         const MTLLoader = new THREE.MTLLoader();
-        let obj = new Object();
+        let bottomBox = new Object();
+        let topBox = new Object();
+        let box = new Object();
+
+        // 网格模型组
+        const group = new THREE.Group();
 
         OBJLoader.load('./chest.obj', res => {
-            obj = res;
-            obj.scale.set(10, 10, 10); //放大obj组对象
-            const newObj = obj.clone();
-            newObj.children = newObj.children.slice(0, 3).concat(newObj.children.slice(11, 14));
-            obj.children = obj.children.slice(3, 11)
-            scene.add(obj);//返回的组对象插入场景中
-            scene.add(newObj);
+            box = res;
+            box.scale.set(10, 10, 10); //放大obj组对象
+
+            box.children[0].material[0].color.set(0x696969);
+            box.children[0].material[1].color.set(0x696969);
+            box.children[1].material[1].color.set(0x808080);
+            box.children[1].material[0].color.set(0x425066);
+
+            box.children[2].material.color.set(0x425066);
+            box.children[3].material.color.set(0x425066);
+
+            box.children[4].material.color.set(0x425066);
+            box.children[5].material.color.set(0x808080);
+
+            box.children[6].material[0].color.set(0x808080);
+            box.children[6].material[1].color.set(0x808080);
+            box.children[7].material[0].color.set(0x808080);
+            box.children[7].material[1].color.set(0x808080);
+            box.children[8].material[0].color.set(0x696969);
+            box.children[8].material[1].color.set(0x696969);
+
+            box.children[9].material.color.set(0x425066);
+            box.children[10].material.color.set(0x425066);
+
+            box.children[11].material[0].color.set(0x808080);
+            box.children[11].material[1].color.set(0x808080);
+
+            box.children[12].material.color.set(0x425066);
+            box.children[13].material.color.set(0x808080);
+
+            bottomBox = box.clone();
+            topBox = box.clone();
+
+            bottomBox.children = bottomBox.children.slice(0, 4).concat(bottomBox.children.slice(9, 14));
+            topBox.children = topBox.children.slice(4, 9);
+
+            group.name = "Group";
+            bottomBox.name = "BottomBox";
+            topBox.name = "TopBox";
+            group.add(bottomBox);
+            group.add(topBox);
+            scene.add(group);
         });
-        const point = new THREE.PointLight(0x666666);
-        point.position.set(400, 200, 300); //点光源位置
+        const point = new THREE.PointLight(0xffffff);
+        point.position.set(100, 100, 100); //点光源位置
         scene.add(point); //点光源添加到场景中
-        const ambient = new THREE.AmbientLight(0xff461f);
+        const ambient = new THREE.AmbientLight(0xffffff);
         scene.add(ambient);
 
         const width = window.innerWidth; //窗口宽度
@@ -58,15 +98,20 @@
         // 渲染函数
         function render() {
             renderer.render(scene, camera); //执行渲染操作
-            // mesh.rotateY(0.01);//每次绕y轴旋转0.01弧度
             requestAnimationFrame(render); //请求再次执行渲染函数render，渲染下一帧
         }
         render();
+
         setTimeout(() => {
-            obj.rotation.x -= .8;
-            obj.translateY(15);
+            topBox.position.set(0, 15, 0);
+            topBox.rotation.set(-0.8, 0, 0);
+            // topBox.translateY(15);
+
+            // topBox.scale.set(20, 20, 20);
+            // bottomBox.scale.set(20, 20, 20);
+            
         }, 2000);
-        //创建控件对象  相机对象camera作为参数   控件可以监听鼠标的变化，改变相机对象的属性
+        // 创建控件对象  相机对象camera作为参数   控件可以监听鼠标的变化，改变相机对象的属性
         const controls = new THREE.OrbitControls(camera, renderer.domElement);
     </script>
 </body>
