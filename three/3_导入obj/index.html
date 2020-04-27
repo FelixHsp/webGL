@@ -90,9 +90,9 @@
         camera.position.set(200, 100, 200); //设置相机位置
         camera.lookAt(scene.position); //设置相机方向(指向的场景对象)
 
-        const renderer = new THREE.WebGLRenderer();
+        const renderer = new THREE.WebGLRenderer({antialias: true,alpha:true});
         renderer.setSize(width, height); //设置渲染区域尺寸
-        renderer.setClearColor(0xeeeeee, 1); //设置背景颜色
+        renderer.setClearColor(0xeeeeee, 0); //设置背景颜色
         document.body.appendChild(renderer.domElement); //body元素中插入canvas对象
 
         // 渲染函数
