@@ -13,12 +13,14 @@
 </head>
 
 <body>
-    <script src="../js/three.js"></script>
+    <script src='../js/three.js'></script>
     <!-- obj模型加载库 -->
-    <script src="../js/OBJLoader.js"></script>
+    <script src='../js/OBJLoader.js'></script>
     <!-- obj模型材质加载库MTLLoader -->
-    <script src="../js/MTLLoader.js"></script>
-    <script src="../js/OrbitControls.js"></script>
+    <script src='../js/MTLLoader.js'></script>
+    <script src='../js/OrbitControls.js'></script>
+    <!-- 引入tween.js 实现补间动画 -->
+    <script src='../js/Tween.js'></script>
 
     <script>
         const scene = new THREE.Scene();
@@ -95,6 +97,8 @@
         renderer.setClearColor(0xeeeeee, 0); //设置背景颜色
         document.body.appendChild(renderer.domElement); //body元素中插入canvas对象
 
+        // 宝箱初始状态值
+        const boxOpen = {positionY: 0, rotationX: 0};
         // 渲染函数
         function render() {
             renderer.render(scene, camera); //执行渲染操作
@@ -102,15 +106,17 @@
         }
         render();
 
+        // 两秒后开启宝箱
         setTimeout(() => {
-            topBox.position.set(0, 15, 0);
-            topBox.rotation.set(-0.8, 0, 0);
-            // topBox.translateY(15);
-
-            // topBox.scale.set(20, 20, 20);
-            // bottomBox.scale.set(20, 20, 20);
-            
+            createjs.Ticker.setFPS(60);
+            const boxOpenTween = new createjs.Tween(boxOpen)
+                                     .to({positionY: 15, rotationX: -0.8}, 500)
+                                     .addEventListener('change', function() {
+                                        topBox.position.set(0, boxOpen.positionY, 0);
+                                        topBox.rotation.set(boxOpen.rotationX, 0 ,0);
+                                     });
         }, 2000);
+        
         // 创建控件对象  相机对象camera作为参数   控件可以监听鼠标的变化，改变相机对象的属性
         const controls = new THREE.OrbitControls(camera, renderer.domElement);
     </script>
