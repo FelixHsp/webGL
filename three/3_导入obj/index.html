@@ -10,10 +10,20 @@
             margin: 0;
             overflow: hidden;
         }
+        .open-btn {
+            position: absolute;
+            top: 70%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 30px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            text-align: center;
+            line-height: 30px;
+            cursor: pointer;
+        }
     </style>
-</head>
-
-<body>
     <script src='../js/three.js'></script>
     <!-- obj模型加载库 -->
     <script src='../js/OBJLoader.js'></script>
@@ -22,6 +32,12 @@
     <script src='../js/OrbitControls.js'></script>
     <!-- 引入tween.js 实现补间动画 -->
     <script src='../js/Tween.js'></script>
+</head>
+
+<body>
+    <span class="open-btn">
+        开启宝箱
+    </span>
 
     <script>
         const scene = new THREE.Scene();
@@ -113,12 +129,12 @@
                                         .to({rotationY: 0.8, scale: 1.3}, 1000)
                                         .to({rotationZ: 0.1}, 100)
                                         .to({rotationZ: -0.1}, 100)
-                                        .to({rotationZ: 0.1}, 100)
-                                        .to({rotationZ: -0.1}, 100)
-                                        .to({rotationZ: 0.1}, 100)
-                                        .to({rotationZ: -0.1}, 100)
-                                        .to({rotationZ: 0.1}, 100)
-                                        .to({rotationZ: 0}, 100)
+                                        .to({rotationZ: 0.1}, 90)
+                                        .to({rotationZ: -0.1}, 90)
+                                        .to({rotationZ: 0.1}, 80)
+                                        .to({rotationZ: -0.1}, 80)
+                                        .to({rotationZ: 0.1}, 70)
+                                        .to({rotationZ: 0}, 70)
                                         .to({topPositionY: 12, topRotationX: -0.8}, 500)
                                         .addEventListener('change', function() {
                                             group.rotation.set(0, boxRotation.rotationY, boxRotation.rotationZ);
@@ -135,10 +151,11 @@
         }
         render();
 
-        // 两秒后开启宝箱
-        setTimeout(() => {
+        // 开启宝箱
+        const openBtn  = document.getElementsByClassName('open-btn')[0];
+        openBtn.addEventListener('click', function() {
             openBox();
-        }, 2000);
+        })
         
         // // 创建控件对象  相机对象camera作为参数   控件可以监听鼠标的变化，改变相机对象的属性
         // const controls = new THREE.OrbitControls(camera, renderer.domElement);
